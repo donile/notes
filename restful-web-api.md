@@ -88,6 +88,8 @@
     * API fails to provide response to valid request
     * Level 500 status codes
 
+## Creating and Deleting Resources
+
 ## Method Safety
 An HTTP method is safe if it does not change a resource.
 
@@ -112,3 +114,83 @@ An HTTP method is idempotent when it has the same affect on the resource regardl
       * Age vs DateOfBirth
       * Name vs FirstName and LastName
     * Validation on CreationDto but not on Dto
+
+## Creating a Resource with ASP.NET Core
+  * Name route in method attribute
+  * Accept `<class>CreationDto` object
+  * If CreationDTO is null, return BadRequest()
+  * Map CreationDTO to entity object
+  * If repository save fails:
+    * return StatusCode(500, message) or
+    * throw new Exception(message) which is handled by global error handler
+  * Map object to DTO
+  * return CreatedAtRoute(routeName, routeValues, object)
+    * CreatedAtRoute() is a helper method on Controller class
+    * Adds Location header to HTTP response
+    * Location header provides URI for created resource
+
+## Creating a Child Resource with ASP.NET Core
+  * URI: /api/parents/{parentId}/children
+  * Example URI: /api/authors/{authorId}/books
+  * CreationDTO should not include parentId
+  * Obtain parentId from route value
+  * Method accepts parentId, creationDto
+  * If CreationDTO is null, return BadRequest()
+  * If parent != exist return NotFound()
+  * Map to entity from creationDto
+  * Save in repository
+  * If save fails, throw new Exception
+  * Map book entity to dto
+  * return CreatedAtRoute(routeName, routeValues, object)
+
+## Creating a Parent Resource with Multiple Children Resources
+ * Add list of Children Resources to `<class>CreationDto`
+ * Follow instructions in **Creating a Child Resource**
+
+## Returning List of Specific Resources
+* Create custom ModelBinder for list of GUIDs
+  * Reads route value string that is a comma separated list of GUIDs
+  * Returns list of GUIDs
+* Method accepts list of ids
+  * Provided in as route value
+  * Example: Comma separated list of GUIDs
+* If list of ids is null, return BadRequest()
+* If ids.Count != entities.count, return NotFound()
+* Map entities to DTO
+* Return OK(List<Entities>)
+
+## Creating a List of Resources
+ * URI: /api/resourcescollection
+ * Accept list of `<class>CreationDto`
+ * Map entities to List<DTO>
+ * routeValues = string that is a comma separated list of GUIDs
+ * return CreatedAtRoute(routeName, routeValues, list<DTO>)
+
+## POST to Exisiting Resource
+  * POST to /api/resources/{id} where id exists
+  * Return 409 - Conflict
+
+## Accepting Additional Content-Types
+  * Add XmlDataContractSerializerInputFormatter()
+  * services.AddMvc(setup => setup.InputFormatters.Add(new XmlDataContractSerializerInputFormatter()))
+
+## Deleting a Resource
+  * If parent resource != exist, return NotFound()
+  * If child resource != exist, return NotFound()
+  * Delete book in repository
+  * If delete fails, throw exception (handled by global exception handler)
+  * Return status code 204 - No Content
+  * ASP.NET Core Controller helper method NoContent()
+
+## Deleting a Resource with Child Resources
+  * If parent resource != exist, return NotFound()
+  * Entity Framework Core
+    * Cascade delete on by default
+    * Deleting parent resource deletes child resources
+  * Delete parent resource
+  * If delete fails, throw exception
+  * return NoContent()
+
+## Deleting a Collection Resource
+  * Rarely implemented because very destructive
+  * Example: Deleting all authors deletes all books
