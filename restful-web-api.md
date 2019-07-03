@@ -194,3 +194,90 @@ An HTTP method is idempotent when it has the same affect on the resource regardl
 ## Deleting a Collection Resource
   * Rarely implemented because very destructive
   * Example: Deleting all authors deletes all books
+
+## Updating Resources
+  * Updating
+    * PUT for full updates
+    * PATCH for partial updates
+  * Upserting
+    * Creating a resource with PUT or PATCH
+
+## Complete Update of Resource
+  * Accept `<Class>ForUpdateDto` in HTTP payload
+  * Dto should set fields to default values
+  * If payload cannot be deserialized, return BadRequest()
+  * If parent !exist return NotFound()
+  * If child !exist
+    * Map creationDto to entity object
+    * Set id equal to id in URI routeValue
+    * Add to repository
+    * Throw exception if add fails
+    * Map entity object to dto
+    * return 201 Status Code
+      * ASP.NET return CreatedAtRoute(routeName, routeValues, object)
+  * Map Dto to entity
+  * If update fails, throw exception
+  * Return No Content or OK
+
+## Updating a Collection of Resources
+  * Rarely implemented because very destructive
+  * Delete all existing resources
+  * Replace with new collection
+
+## Upserting
+* HTTP PUT method can be used to create a resource
+* If resource does not exist, PUT creates resource
+* If resource exists, PUT updates resource
+
+| Server Creates URI                    | Client Creates URI                  |
+|---------------------------------------|-------------------------------------|
+| PUT target existing URI               | PUT target nonexisting URI          |
+| URI !exist return Not Found           | If resource !exist, create it       |
+| POST must be used to create resources | PUT can be used to create resources |
+
+## Partially Updating a Resource
+* HTTP Patch is used for partial updates
+* JSON Patch standard (RFC 6902)
+* `Content-Type: application/json-patch+json`
+  * Array of operations to be applied to resource
+  * Example of JSON Patch:
+    ```
+    [
+      {
+        "op": "replace"
+        "path": "/title"
+        "value": "new title"
+      },
+      {
+        "op": "remove",
+        "path": "/description"
+      }
+    ]
+
+## JSON Patch Operations
+  * Add
+  * Remove
+  * Replace
+  * Copy
+  * Move
+  * Test
+
+## Partial Update of Resource
+  * Accept `parentId`, `childId`, `JsonPatchDocument<childForUpdateDto>`
+  * If validation fails, return Bad Request
+  * If parent resource !exist, return Not Found
+  * If child resource !exist
+    * Create new ForUpdateDto
+    * Apply patch to ForUpdateDto object
+    * Map ForUpdateDto to entity object
+    * Set entity object.id to childId from URI routeValues
+    * Add book to repository
+    * Throw exception if save fails
+    * Return 201 Created response
+      * ASP.NET return CreatedAtRoute(routeName, routeValues, object)
+  * Map ForUpdateDto to entity object
+  * Apply patch to entity object
+  * Validate patch
+  * Save entity
+  * If save fails, throw exception
+  * return No Content
