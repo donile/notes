@@ -281,3 +281,61 @@ An HTTP method is idempotent when it has the same affect on the resource regardl
   * Save entity
   * If save fails, throw exception
   * return No Content
+
+## RESTful Validation
+If HTTP request is syntactically correct, but semantically incorrect, a 400 level error should be returned.  The client made an error, not the server.  Returning a 500 level error (server error) is incorrect.
+
+If HTTP request is syntactically correct but does not pass the custom logic of the system (e.g. the string length is greater than permitted) then status code 422 - Unprocessable Entity
+should be returned.
+
+The HTTP Response body should contain validation errors.
+
+  * Do not report errors from database layer
+  * Report validation at the DTO layer
+  * OK to have two validation layers
+    * Different validation rules at different layers
+    * Example:
+      * DTO class requires properties to be completed
+      * Entity object does not require same properties
+
+## RESTful Validation in ASP.NET Core
+
+  * Apply attributes to properties on DTO objects
+  * DataAnnotations namespace `System.ComponentModel.DataAnnotations`
+  
+  * Problem: ASP.NET does not provide helper method on Controller class that returns a result with status code 422 - Unprocessable Entity
+  * Solution:
+     * Create `UnprocessableEntityObjectResult` class
+      * Inherits from `ObjectResult` class
+      * Constructor
+        * Overrides `ObjectResult` constructor
+        * Accepts ModelStateDictionary
+        * Pass `new SerializableError(modelStateDictionary)` to base
+        * If `modelState` is null, throw argNullException
+        * Sets StatusCode = 422
+
+  * Validation for HTTP POST method
+    * if arg representing resource is null
+      * payload could not be parsed into required type
+      * return Bad Request
+    * if !ModelState.IsValid
+      * return new UnprocessableEntityObjectResult
+  
+  * Validation for HTTP PUT method
+    * Nearly identical to POST
+    * Use abstract DTO classes to avoid duplicate validation attributes
+    * Override properties to apply additional validation requirements
+
+  * Validation for HTTP PATCH method
+    * If JSON Patch semantics are invalid, return 422
+    * Pass ModelState to JsonPatchDoc.ApplyTo()
+    * ApplyTo() method adds errors to ModelStateDictionary
+    * Validation occurs on JSON patch document, not entity
+    * Must validate model after applying patch
+    * Use Controller helper moethod TryValidateModel()
+    * Upserting
+      * If resource not found (is null)
+      * pass ModelState to JsonPatch.ApplyTo()
+      * ApplyTo() method adds errors to ModelStateDictionary
+      * TryValidateModel()
+      * If not !Model.IsValid return UnprocessableEntityObjectResult
