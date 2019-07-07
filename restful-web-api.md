@@ -334,8 +334,86 @@ The HTTP Response body should contain validation errors.
     * Must validate model after applying patch
     * Use Controller helper moethod TryValidateModel()
     * Upserting
-      * If resource not found (is null)
+      * If resource not found in repository (is null)
       * pass ModelState to JsonPatch.ApplyTo()
       * ApplyTo() method adds errors to ModelStateDictionary
       * TryValidateModel()
       * If not !Model.IsValid return UnprocessableEntityObjectResult
+
+## Paging, Filtering and Searching
+  * Paging
+    * Helps avoid performance issues
+    * Parameters passed through query string of URI
+    * Parameters:
+      * PageSize (capped at a maximum value)
+      * PageNumber (return first page by default)
+    * Meta Data in HTTP Response Custom Headers
+      * Links to previous and next pages
+      * Total count of resource
+      * Number of pages
+  
+  * ASP.NET Core Paging
+    * Action methods targeted by HTTP GET
+      * Method arguments
+        * Set default values
+        * pageNumber = 1
+        * pageSize = 5
+      * Guard clause to check and set pageSize
+  
+  * Filtering
+    * Limits resources returned based on result of predicate
+    * Pass fieldname as paramter in query string
+    * Example: `api/authors?genre=Fantasy`
+    * Allow filtering on fields that are part of the resource
+    * Do not allow filtering on:
+      * Parent
+      * Child resources
+      * Entity object (resource is represented by DTO)
+  
+  * Searching
+    * API decides which fields to query against for the search term
+
+## Data Sorting and Shaping
+
+## HATEOAS
+
+## ASP.NET API Versioning
+* Create custom
+  * content-type
+  * media-type
+* Create custom Action Constraint Attribute
+  * Descendent of Attribute class
+  * Implements IActionConstraint
+* Use Action Contrainst Attributes on Action Methods
+  * Action Contrainst evaluates headers
+    * media-type
+    * content-type
+  * Only enter Controller Action Method if matching media-type or content-type
+
+## Rate Limiting
+
+## Testing API
+
+## Documenting API
+* Swagger OpenAPI
+* Swashbuckle
+
+## HTTP `OPTIONS` Request
+* Headers required in HTTP response to HTTP `OPTIONS` request
+  * `Allow`
+  * `Content-Length`
+* `Allow` value is set to comma separated list of HTTP methods available on resource
+* `Content-Length` is set to `0`
+* Example:
+  ```
+  Allow: GET, OPTIONS, POST
+  Content-Length: 0
+  ```
+
+## HTTP `HEAD` Request
+* Identical to `GET` with one exception
+* Exception: No response body
+* Used by client to test:
+  * Validity
+  * Accessibility
+  * Modification of resource
