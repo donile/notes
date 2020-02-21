@@ -341,16 +341,33 @@ The HTTP Response body should contain validation errors.
       * If not !Model.IsValid return UnprocessableEntityObjectResult
 
 ## Paging, Filtering and Searching
+  * Create Parameters class to hold query parameters: `<Class>ResourceParameters`
+  * `IRepository.Get<Class>()` method should accept `<Class>ResourceParameters` argument
+  * Use `IQueryable<T>` methods to implment paging
+    * `IQueryable<T>.Skip()`
+    * `IQueryable<T>.Take()`
+  * `IRepository` should return a `PagedList<T>`
+
+  * `PagedList<T>` class exposes properties that track which values are included in the result
+
+  * Use `IActionContextAccessor`, `IUrlHelper` classes to build previous and next URIs
+
+  * Add pagination header to HTTP response
+  
   * Paging
     * Helps avoid performance issues
-    * Parameters passed through query string of URI
+      * Limit the size of the result set returned from database
+      * Limit the size of the result result transmitted to client
+    * Paging parameters passed through query string of URI
     * Parameters:
+      * Set default values for paging parameters
       * PageSize (capped at a maximum value)
       * PageNumber (return first page by default)
-    * Meta Data in HTTP Response Custom Headers
+    * Pagination Meta Data in HTTP Response Custom Headers
+      * Example custom header: `X-Pagination` with JSON that includes pagination information
       * Links to previous and next pages
-      * Total count of resource
-      * Number of pages
+      * Total resource count
+      * Total page count
   
   * ASP.NET Core Paging
     * Action methods targeted by HTTP GET
@@ -374,6 +391,26 @@ The HTTP Response body should contain validation errors.
     * API decides which fields to query against for the search term
 
 ## Data Sorting and Shaping
+
+### Sorting
+Example URIs
+
+Sort by one field
+http://host/api/resource?orderBy=field
+
+Sort by one field, descending
+http://host/api/resource?orderBy=field descending
+
+Sort on multiple fields
+http://host/api/resource?orderBy=field1 descending, field2
+
+### Sorting - ASP.NET Core Impmentation
+Add `OrderBy` property to `<class>ResourceParameters` class
+Use ASP.NET Core model binding to bind `orderBy` query string parameter to `<class>ResourceParameters` class
+Pass `<class>ResourceParameters` object to repository class
+`EF<ResourceClass>Repository` class reads `orderBy` parameter
+Create `ApplySort()` extension method for `IQueryable<T>`
+Custom `IQueryable<T>.ApplySort()` method adds `OrderBy` statements to SQL query
 
 ## HATEOAS
 
