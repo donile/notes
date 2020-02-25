@@ -386,7 +386,7 @@ Use `IQueryable<T>` methods to implment paging
 
 Use `Url` property of `Controller` class to build URIs for previous and next pages of data.
 
-  * Filtering
+### Filtering
     * Limits resources returned based on result of predicate
     * Pass fieldname as paramter in query string
     * Example: `api/authors?genre=Fantasy`
