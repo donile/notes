@@ -341,42 +341,51 @@ The HTTP Response body should contain validation errors.
       * If not !Model.IsValid return UnprocessableEntityObjectResult
 
 ## Paging, Filtering and Searching
-  * Create Parameters class to hold query parameters: `<Class>ResourceParameters`
-  * `IRepository.Get<Class>()` method should accept `<Class>ResourceParameters` argument
-  * Use `IQueryable<T>` methods to implment paging
-    * `IQueryable<T>.Skip()`
-    * `IQueryable<T>.Take()`
-  * `IRepository` should return a `PagedList<T>`
+### Paging
+Best practice to implement paging on all collection resources
 
-  * `PagedList<T>` class exposes properties that track which values are included in the result
+Helps avoid performance issues
+  * Limit the size of the result set returned from database
+  * Limit the size of the result result transmitted to client
 
-  * Use `IActionContextAccessor`, `IUrlHelper` classes to build previous and next URIs
+Paging parameters passed through query string of URI
 
-  * Add pagination header to HTTP response
-  
-  * Paging
-    * Helps avoid performance issues
-      * Limit the size of the result set returned from database
-      * Limit the size of the result result transmitted to client
-    * Paging parameters passed through query string of URI
-    * Parameters:
-      * Set default values for paging parameters
-      * PageSize (capped at a maximum value)
-      * PageNumber (return first page by default)
-    * Pagination Meta Data in HTTP Response Custom Headers
-      * Example custom header: `X-Pagination` with JSON that includes pagination information
-      * Links to previous and next pages
-      * Total resource count
-      * Total page count
-  
-  * ASP.NET Core Paging
-    * Action methods targeted by HTTP GET
-      * Method arguments
-        * Set default values
-        * pageNumber = 1
-        * pageSize = 5
-      * Guard clause to check and set pageSize
-  
+Pagaing Parameters
+* PageSize (capped at a maximum value)
+* PageNumber (return first page by default)
+
+Pagination Meta Data
+  * Include in HTTP Response Custom Headers
+  * Example custom header: `X-Pagination`
+  * Example custom header value: JSON that includes pagination information
+  * Links to previous and next pages
+  * Total resource count
+  * Total page count
+
+### ASP.NET Core Paging
+
+Create Parameters class to hold query parameters: `<Class>ResourceParameters`
+
+Create `PagedList<TResource>` class to help create and hold pagination meta data.
+
+`PagedList<TResource>` Class
+* CurrentPage
+* TotalPages
+* PageSize
+* TotalCount
+* HasPrevious (calculated property)
+* HasNext (calculated property)
+
+`IRepository.Get<Class>()` method should accept `<Class>ResourceParameters` argument
+
+`IRepository` should return a `PagedList<TResource>`
+
+Use `IQueryable<T>` methods to implment paging
+  * `IQueryable<T>.Skip()`
+  * `IQueryable<T>.Take()`
+
+Use `Url` property of `Controller` class to build URIs for previous and next pages of data.
+
   * Filtering
     * Limits resources returned based on result of predicate
     * Pass fieldname as paramter in query string
