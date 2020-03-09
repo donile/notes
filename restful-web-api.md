@@ -132,6 +132,8 @@ An HTTP method is idempotent when it has the same affect on the resource regardl
 ## Creating a Child Resource with ASP.NET Core
   * URI: /api/parents/{parentId}/children
   * Example URI: /api/authors/{authorId}/books
+  * Implmented in child's controller
+  * Action method: `Create<Child>For<Parent>(parentId, childCreationDto)`
   * CreationDTO should not include parentId
   * Obtain parentId from route value
   * Method accepts parentId, creationDto
@@ -387,17 +389,18 @@ Use `IQueryable<T>` methods to implment paging
 Use `Url` property of `Controller` class to build URIs for previous and next pages of data.
 
 ### Filtering
-    * Limits resources returned based on result of predicate
-    * Pass fieldname as paramter in query string
-    * Example: `api/authors?genre=Fantasy`
-    * Allow filtering on fields that are part of the resource
-    * Do not allow filtering on:
-      * Parent
-      * Child resources
-      * Entity object (resource is represented by DTO)
+  * Limits resources returned based on result of predicate
+  * Pass fieldname as parameter in query string
+  * Example: `/api/authors?genre=Fantasy`
+  * Allow filtering on fields that are part of the resource
+  * Do not allow filtering on a resource's:
+    * Parent's field(s)
+    * Children's field(s)
+    * Entity object (resource is represented by DTO)
   
-  * Searching
-    * API decides which fields to query against for the search term
+### Searching
+  * API decides which fields to query against for the search term
+  * Example: `/api/authors?searchQuery=King`
 
 ## Data Sorting and Shaping
 
