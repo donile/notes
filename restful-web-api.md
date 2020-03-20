@@ -265,6 +265,7 @@ An HTTP method is idempotent when it has the same affect on the resource regardl
   * Test
 
 ## Partial Update of Resource
+  * API Endpoint URI: `PATCH /parent/{parentId}/child/{childId}`
   * Accept `parentId`, `childId`, `JsonPatchDocument<childForUpdateDto>`
   * If validation fails, return Bad Request
   * If parent resource !exist, return Not Found
