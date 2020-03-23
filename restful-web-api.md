@@ -425,6 +425,34 @@ Pass `<class>ResourceParameters` object to repository class
 Create `ApplySort()` extension method for `IQueryable<T>`
 Custom `IQueryable<T>.ApplySort()` method adds `OrderBy` statements to SQL query
 
+### Shaping Resources
+Allows the consumer to choose the resource's fields that are included in the representation returned in the HTTP response.
+
+Example
+
+URI: `/api/parent?fields=id,name`
+
+Return: `[ { id: 1, name: name1 }, {id: 2, name: name2 } ]`
+
+### Shaping Resources in ASP.NET Core
+Implement `IEnumerable<TSource>` extension method that accepts an `IEnumerable<TSource>` and a `string` that contains the comma separated list of fields that should be included and return an `IEnumerable<ExpandoOject>` with only the requested fields.
+
+```csharp
+public static IEnumerable<ExpandoObject> ShapeData<TSource>(this IEnumerable<TSource> source, string fields)
+```
+
+if source is null throw ArgumentNullException
+create List<PropertyInfo> using only one TSource object
+if fields is null or white space return all public fields
+else split comma separated list into string[] of field names
+trim field names
+add PropertyInfo to List<PropertyInfo>
+For each source object, create an ExpandoObject
+For each PropertyInfo:
+  Get value of property from source object
+  Add property and value to ExpandoObject
+Add ExpandoObject to List<ExpandoObject>
+
 ## HATEOAS
 
 ## ASP.NET API Versioning
