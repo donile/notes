@@ -88,6 +88,35 @@
     * API fails to provide response to valid request
     * Level 500 status codes
 
+## Getting Resources
+
+### Working with Parent/Child Relationships
+If a resource is always the child of a parent, the URI should reflect the mandatory relationship.
+
+#### Implementation - Get All Children of Parent
+
+Example URI: `/api/parent/{parentId}/children`
+
+If parent does not exist, return Not Found status code
+
+Get children for author from repository
+
+Map children to DTOs
+
+Return DTOs
+
+#### Implementation - Get Child of Parent
+
+Example URI: `/api/parent/{parentId}/children/{childId}`
+
+If parent does not exist, return Not Found status code
+
+If child does not exist, return Not Found status code
+
+Map child to DTO
+
+Return DTO
+
 ## Creating and Deleting Resources
 
 ## Method Safety
