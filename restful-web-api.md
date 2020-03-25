@@ -88,6 +88,14 @@
     * API fails to provide response to valid request
     * Level 500 status codes
 
+## Repository Pattern
+
+### Benefits
+
+Switch out persistence technology while still adhering to the contract defined by the repository interface(s).
+
+Use different persistence technology depending upon requirements.  For example one query might use Entity Framework while another might use ADO.NET or even pure SQL.
+
 ## Getting Resources
 
 ### Working with Parent/Child Relationships
