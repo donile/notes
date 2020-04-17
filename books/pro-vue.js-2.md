@@ -166,3 +166,33 @@ Emit events on the Event Bus
     }
 <script>
 ```
+
+## Chapter 25 - Transitions
+
+### Vue.js Transitions
+
+#### Transitions for Single Elements
+The `<transition>` element is used to apply CSS classes to the wrapped element that create CSS transitions.
+
+[Transition Classes](https://vuejs.org/v2/guide/transitions.html#Transition-Classes)
+
+When Vue is adding or removing the wrapped element from the DOM, Vue applies and removes the Transition Classes to and from the wrapped element at specifc points in time.  For example, the `v-enter` class is applied immediately before the wrapped element is added to the DOM.
+
+[Custom Transition Classes](https://vuejs.org/v2/guide/transitions.html#Custom-Transition-Classes)
+
+Custom Transition Classes are used to apply pre-defined CSS classes, possibly from a third-party transition library like [animate.css](https://daneden.github.io/animate.css/), to a Vue transition.
+
+[Transitions on Initial Render](https://vuejs.org/v2/guide/transitions.html#Transitions-on-Initial-Render)
+
+By default, transitions are not applied when Vue first adds an element to the DOM.  To enable the transition for the wrapped element's first appearance, add the `appear` attribute to the `transition` element.
+
+[Transition Mode](https://vuejs.org/v2/guide/transitions.html#Transition-Modes)
+
+By default, Vue transitions elements simultaneously. If one element is replacing another, this can lead to an awkward appearance while both elements are in DOM; one entering while the other is leaving.  To prevent both elements from appearing, set the `mode` attribute appropriately.  Setting the `mode` attribute of the `transition` element to `out-in` will fade out the element presently in the DOM before the new element is fades in (and vice versa for the `in-out` attribute).
+
+#### Transitions for Lists of Elements
+[List Transitions](https://vuejs.org/v2/guide/transitions.html#List-Transitions)
+
+Use the `<transition-group>` element to apply transitions to a list of elements.
+
+The `tag` attribute of the `<transition-group>` element must be specified because Vue replaces the `<transition-group>` element with an element of the type defined by the `tag` attribute.
