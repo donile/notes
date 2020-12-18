@@ -455,12 +455,12 @@ Sort on multiple fields
 http://host/api/resource?orderBy=field1 descending, field2
 
 ### Sorting - ASP.NET Core Impmentation
-Add `OrderBy` property to `<class>ResourceParameters` class
-Use ASP.NET Core model binding to bind `orderBy` query string parameter to `<class>ResourceParameters` class
-Pass `<class>ResourceParameters` object to repository class
-`EF<ResourceClass>Repository` class reads `orderBy` parameter
-Create `ApplySort()` extension method for `IQueryable<T>`
-Custom `IQueryable<T>.ApplySort()` method adds `OrderBy` statements to SQL query
+Add `OrderBy` property to `<class>ResourceParameters` class  
+Use ASP.NET Core model binding to bind `orderBy` query string parameter to `<class>ResourceParameters` class  
+Pass `<class>ResourceParameters` object to repository class  
+`EF<ResourceClass>Repository` class reads `orderBy` parameter  
+Create `ApplySort()` extension method for `IQueryable<T>`  
+Custom `IQueryable<T>.ApplySort()` method adds `OrderBy` statements to SQL query  
 
 ### Shaping Resources
 Allows the consumer to choose the resource's fields that are included in the representation returned in the HTTP response.
@@ -478,17 +478,18 @@ Implement `IEnumerable<TSource>` extension method that accepts an `IEnumerable<T
 public static IEnumerable<ExpandoObject> ShapeData<TSource>(this IEnumerable<TSource> source, string fields)
 ```
 
-if source is null throw ArgumentNullException
-create List<PropertyInfo> using only one TSource object
-if fields is null or white space return all public fields
-else split comma separated list into string[] of field names
-trim field names
-add PropertyInfo to List<PropertyInfo>
-For each source object, create an ExpandoObject
-For each PropertyInfo:
-  Get value of property from source object
-  Add property and value to ExpandoObject
-Add ExpandoObject to List<ExpandoObject>
+if `source` is `null` throw `ArgumentNullException`  
+create `List<PropertyInfo>` using only one `TSource` object  
+if `fields` is `null` or white space return all public fields  
+else split comma separated list of field names into `string[]`  
+trim field names  
+add `PropertyInfo` to `List<PropertyInfo>`  
+For each source object, create an `ExpandoObject`  
+For each `PropertyInfo`:  
+Get value of property from source object  
+Add property and value to `ExpandoObject`  
+Add `ExpandoObject` to `List<ExpandoObject>`  
+return `List<ExpandoObject>`
 
 ## HATEOAS
 
