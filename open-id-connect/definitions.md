@@ -1,6 +1,6 @@
 # OpenID Connect Definitions
 
-### OpenID Connect ID Token
+### ID Token
 
 A signed JSON Web Token (JWT) given to the client application alongside the regular OAuth access token.  It is intended to be parsed by the client application.  The ID token includes claims.  It should never be passed to an external service.
 
@@ -15,13 +15,13 @@ A signed JSON Web Token (JWT) given to the client application alongside the regu
 ```
 {
   {
-    // JWT Header
+    // header
     "type": "JWT",
     "alg": "rsaKey.alg",
     "kid": 
   },
   {
-    // Payload
+    // payload (claims)
     iss: <idp-host-url>,
     sub: <unique-id>,
     aud: <client-id>,
@@ -29,7 +29,7 @@ A signed JSON Web Token (JWT) given to the client application alongside the regu
     exp: <time-id-token-expires>
   },
   {
-    
+    // signature
   }
 }
 ```

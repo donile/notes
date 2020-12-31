@@ -2,7 +2,7 @@
 
 Use the authorization code flow so the client (relying party) only accepts tokens received directly from the authorization server.
 
-Use the `state` parameter to provide an unguessable value.  The client should assign the a random `state` value and verify it is the same when the response from from the authorization server is received.
+Use the `state` parameter to provide an unguessable value.  The client should assign `state` a random value and verify it is the same when the response from from the authorization server is received.
 
 ## Client Best Practices
 
@@ -20,13 +20,15 @@ Use the `state` parameter to provide an unguessable value.  The client should as
 
 HTTP request to OpenId Connect authorization endpoint
 
-http://idp.hostname.com/connect/authorize?
-client_id=<client-id>
-&redirect_uri=http://client.app.com/endpoint
-&scope=openid profile
-&response_type=code
-&response_mode=form_post
-&nonce=<random-bytes>
+```
+http://idp.hostname.com/connect/authorize
+  ?client_id=<client-id>
+  &redirect_uri=http://client.app.com/endpoint
+  &scope=openid profile
+  &response_type=code
+  &response_mode=form_post
+  &nonce=<random-bytes>
+```
 
 Response Types -> Authorization Flow
 | Response Type       | Flow               |
