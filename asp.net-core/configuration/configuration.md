@@ -37,32 +37,3 @@ If the key for a configuration setting is not present, the default value for the
 // setting will contain the default value for an instance of TSetting
 TSetting setting = _configuration.GetValue<TSetting>("This:Key:Is:Not:Present");
 ```
-
-# Binding Configuration Settings to a Class
-
-`appsettings.json`
-```json
-{
-    "Section":
-    {
-        "MyProperty": true,
-        "MyOtherProperty": false
-    }
-}
-```
-
-```csharp
-public class MyConfiguration
-{
-    public bool MyProperty { get; set; }
-    public bool MyOtherProperty { get; set; }
-}
-```
-
-```csharp
-var myConfiguration = new MyConfiguration();
-_configuration.Bind("Section", myConfiguration);
-
-// myConfiguration.MyProperty == true  => true
-// myConfiguration.MyOtherProperty == false => true
-```
