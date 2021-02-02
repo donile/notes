@@ -82,3 +82,11 @@ public class MyService
     }
 }
 ```
+
+## Choosing Between the Options Interfaces
+| Property      | `IOptions<T>` | `IOptionsSnapshot<T>` | `IOptionsMonitor<T>` |
+| Reloadable    | No            | Yes                   | Yes                  |
+| Lifetime      | Singleton     | Scoped                | Singleton            |
+| Bound         | At first use  | Per HTTP request      | Upon request         |
+| Dependency Of | All lifetimes | Not into Singleton    | All lifetimes        |
+| Named Options | No            | Yes                   | Yes                  |
