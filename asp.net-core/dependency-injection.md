@@ -181,3 +181,31 @@ Use `Scrutor` `Decorate()` extension method to add decorated service to `IServic
 ```csharp
 services.Decorate<IDecorator, Decorated>();
 ```
+
+## Conditionally Add Service to `IServiceCollection`
+Add an extension method that accepts an `IConfiguration` argument.
+```csharp
+public static IServiceCollection AddMyService(this IserviceCollection services, IConfiguration configuration)
+{
+    if(configuration.GetValue<bool>("FancyService"))
+    {
+        services.AddTransient<TServiceInterface,FancyService>();
+    }
+    else
+    {
+        services.AddTransient<TServiceInterface, PlainService>();
+    }
+
+    return services;
+}
+```
+
+Call the extension method in `StartUp.ConfigureServices()`.
+```csharp
+public void ConfigureServices()
+{
+    // ...
+    services.AddMyService(_configuration);
+    // ...
+}
+```
