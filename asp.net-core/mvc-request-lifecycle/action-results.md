@@ -23,5 +23,14 @@ FileResult -> *.doc file
 
 ## Result Filters
 
+Inherit from `Attribute`
 
+Implment `IResultFilter` interface
 
+Runs before and after `IActionResult.ExecuteResultAsync()`
+
+Exposes:
+
+`OnResultExecuting(ResultExecutingContext context)`
+
+`OnResultExecuted(ResultExecutingContext context)`
