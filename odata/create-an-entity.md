@@ -1,4 +1,4 @@
-# Creating a Resource
+# Creating an Entity
 
 Presently, the `ApiController` attributes is not compatiable with the `ODataController` base class.
 
@@ -6,7 +6,7 @@ Additionally, without the `ApiController` attribute applied to the class, comple
 
 Lastly, since the `ApiController` attribute cannot be applied, a `BadRequestObject` is not automatically returned when the ModelState is invalid; therefore it must be checked and handled within the action method.
 
-## Create Resource Endpoint
+## Create Entity Endpoint
 ```csharp
 ...
 [HttpPost("Items")]
