@@ -15,6 +15,7 @@ public void ConfigureServices(IServiceCollection services)
         options.AddModel("odata", new MyEntityDataModel().GetEntityDataModel))
         .Select()
         .Expand()
+        .OrderBy()
     });
 }
 ```
