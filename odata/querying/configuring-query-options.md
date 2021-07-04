@@ -16,6 +16,8 @@ public void ConfigureServices(IServiceCollection services)
         .Select()
         .Expand()
         .OrderBy()
+        .SetMaxTop(N)  // prevent client requests for more than N entities
+        .Count()
     });
 }
 ```
