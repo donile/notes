@@ -2,7 +2,7 @@
 
 ## Configure the `$select` query parameter
 
-Call the `Select()` method.
+Call the `Select()`, `Expand()` methods.
 
 ```csharp
 using Microsoft.AspNetCore.OData;
@@ -12,7 +12,9 @@ public void ConfigureServices(IServiceCollection services)
 {
     ...
     services.AddOData(options => {
-        options.AddModel("odata", new MyEntityDataModel().GetEntityDataModel)).Select();
+        options.AddModel("odata", new MyEntityDataModel().GetEntityDataModel))
+        .Select()
+        .Expand()
     });
 }
 ```
