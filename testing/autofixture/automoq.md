@@ -1,6 +1,6 @@
 # AutoFixture.AutoMoq
 
-## Inject Mocked Dependency Into Object Instantiated by AutoFixtured
+## Inject Mocked Dependency Into Object Instantiated by AutoFixture
 ```csharp
 // requires Nuget package AutoFixture.AutoMoq
 using AutoFixture.AutoMoq;
@@ -9,7 +9,7 @@ using AutoFixture.AutoMoq;
 public void TestMethod()
 {
     var fixture = Fixture();
-    fixture.Customize(new AutoMoqCustomization));
+    fixture.Customize(new AutoMoqCustomization());
 
     var mockDependency = fixture.Freeze<Mock<IDependency>>();
 
