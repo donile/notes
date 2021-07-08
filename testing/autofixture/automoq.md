@@ -1,6 +1,9 @@
 # AutoFixture.AutoMoq
 
 ## Inject Mocked Dependency Into Object Instantiated by AutoFixture
+
+Using AutoFixture.AutoMoq to instantiate the system under test (SUT) provides several benefits, most notably of which is that it is not necessary to update the calls to the SUT's constructor each time the SUT's constructor signature changes.  Instead, `freeze` the mock interface on the `Fixture` used to instantiate the SUT, instructing the `Fixture` to create the SUT with the same mock object each time the SUT is instantiated.
+
 ```csharp
 // requires Nuget package AutoFixture.AutoMoq
 using AutoFixture.AutoMoq;
