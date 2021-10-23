@@ -67,6 +67,7 @@ public class AnonymousDataGenerator : ISpecimenBuilder
     {
         // determine if the incoming request should be handled by this
         // ISpecimenBuilder
+        return typeof(request).Equals(TypeOfAnonymousDataToReturn);
     }
 }
 ```
