@@ -31,7 +31,7 @@ Within the settings for the C# extension, enable Omnsharp decompilation support.
 
 To debug code, the debugger requires symbol (`.pdb`) files.  The compiler produces symbol files during the compilation process, so when the project under development is built, symbol files are created and available for the debugger to use.
 
-The symbol files for third-party NuGet packages is not available becuase those packages have not been compiled on the local development machine.  However, it is possible to obtain the symbol files for a third-party NuGet package.
+The symbol files for third-party NuGet packages are not available becuase those packages have not been compiled on the local development machine.  However, it is possible to obtain the symbol files for a third-party NuGet package.
 
 Symbol files (`.pdb` files) are usually hosted on a symbol server.  Adding the URI for the symbol server to the `searchPaths` array (as shown in the example above) allows VS Code to find and download the `.pdb` file for the referenced `.dll`.
 
